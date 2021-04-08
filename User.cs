@@ -33,6 +33,11 @@ namespace Project2_Server_Gui
             user_Password = new_Password;
         }
 
+        public int get_ID()
+        {
+            return user_ID;
+        }
+
         public bool is_Password(string password)
         {
             return string.Equals(user_Password, password);
