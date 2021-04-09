@@ -41,9 +41,44 @@ namespace Project2_Server_Gui
             }
         }
 
-        public void write_To_resultsurface()
+        public void delete_Result_Surface_Data(string fn, int dss)
         {
+            string sql = "DELETE  FROM 	resultsurface WHERE FileName = '" + fn.ToString() + "' && DataSetSerial= " + dss.ToString() + ";";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            int result = cmd.ExecuteNonQuery();
+        }
 
+
+
+        public void delete_Data_Set_Data(string fn,int dss)
+        {
+            string sql = "DELETE  FROM 	datasetdatabase WHERE FileName = '" + fn.ToString() + "' &&DataSetSerial= " + dss.ToString() + ";";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            int result = cmd.ExecuteNonQuery();
+        }
+
+        public MySqlDataReader get_Result_Surface_Reader(string fn,int dss)
+        {
+            string sql = "SELECT * FROM 	resultsurface WHERE FileName = '" + fn.ToString() + "' &&DataSetSerial= " + dss.ToString() + ";";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            return cmd.ExecuteReader();
+        }
+
+
+        public void write_To_resultsurface(string fn, int dss, int ic, int c, int mr)
+        {
+            string sql = "insert into resultsurface(FileName,DataSetSerial,ItemCount,Cubage,MaxResult) values('"
+                + fn + "'," + dss.ToString() + "," + ic.ToString() + "," + c.ToString() + "," + mr.ToString() + ");";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            int result = cmd.ExecuteNonQuery();
+        }
+
+        public void write_To_Data_Set_DB(string fn,int dss,int iss,int p,int w,decimal r)
+        {
+            string sql = "insert into datasetdatabase(FileName,DataSetSerial,ItemSetSerial,Profit,Weight,Radio) values('" 
+                + fn + "'," + dss.ToString() + "," + iss.ToString() + "," + p.ToString() + "," + w.ToString() + "," + r.ToString() + ")";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            int result = cmd.ExecuteNonQuery();
         }
 
         public void write_To_usertable(string user_Name,int user_ID,string user_Password)
@@ -51,6 +86,13 @@ namespace Project2_Server_Gui
             string sql = "insert into usertable(UserName,UserId,UserPassword) values('" + user_Name+"',"+user_ID.ToString()+",'"+user_Password+ "')";
             MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
             int result = cmd.ExecuteNonQuery();
+        }
+
+        public MySqlDataReader get_Data_Set_Reader(string fn,int serial)
+        {
+            string sql = "SELECT * FROM 	datasetdatabase WHERE FileName = '" + fn.ToString() + "' &&DataSetSerial= "+serial.ToString()+";";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            return cmd.ExecuteReader();
         }
 
         public bool search_User(int id)
