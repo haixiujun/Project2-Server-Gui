@@ -64,6 +64,13 @@ namespace Project2_Server_Gui
             return cmd.ExecuteReader();
         }
 
+        public MySqlDataReader get_Result_Surface_Reader()
+        {
+            string sql = "SELECT * FROM 	resultsurface" + ";";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            return cmd.ExecuteReader();
+        }
+
 
         public void write_To_resultsurface(string fn, int dss, int ic, int c, int mr)
         {
@@ -75,10 +82,22 @@ namespace Project2_Server_Gui
 
         public void write_To_Data_Set_DB(string fn,int dss,int iss,int p,int w,decimal r)
         {
-            string sql = "insert into datasetdatabase(FileName,DataSetSerial,ItemSetSerial,Profit,Weight,Radio) values('" 
-                + fn + "'," + dss.ToString() + "," + iss.ToString() + "," + p.ToString() + "," + w.ToString() + "," + r.ToString() + ")";
-            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
-            int result = cmd.ExecuteNonQuery();
+            try
+            {
+                string sql = "insert into datasetdatabase(FileName,DataSetSerial,ItemSetSerial,Profit,Weight,Radio) values('"
+               + fn + "'," + dss.ToString() + "," + iss.ToString() + "," + p.ToString() + "," + w.ToString() + "," + r.ToString() + ")";
+                MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+                int result = cmd.ExecuteNonQuery();
+            }
+            catch(Exception e)
+            {
+
+            }
+            finally
+            {
+
+            }
+           
         }
 
         public void write_To_usertable(string user_Name,int user_ID,string user_Password)
@@ -88,9 +107,10 @@ namespace Project2_Server_Gui
             int result = cmd.ExecuteNonQuery();
         }
 
+
         public MySqlDataReader get_Data_Set_Reader(string fn,int serial)
         {
-            string sql = "SELECT * FROM 	datasetdatabase WHERE FileName = '" + fn.ToString() + "' &&DataSetSerial= "+serial.ToString()+";";
+            string sql = "SELECT * FROM 	datasetdatabase WHERE FileName = '" + fn.ToString() + "' &&DataSetSerial= '"+serial.ToString()+"';";
             MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
             return cmd.ExecuteReader();
         }
@@ -111,6 +131,32 @@ namespace Project2_Server_Gui
                 }
             }
         }
+
+        public string get_All_Result_Str()
+        {
+            string sql = "SELECT * FROM 	resultsurface";
+            MySqlCommand cmd = new MySqlCommand(sql, connection_To_DB);
+            string result = "";
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+
+                while (reader.Read())
+                {
+                    string temp_File_Name = reader.GetString("FileName");
+                    string temp_Data_Set_Serial = reader.GetString("DataSetSerial");
+                    string temp_Item_Count = reader.GetString("ItemCount");
+                    string temp_Cubage = reader.GetString("Cubage");
+                    string temp_Max_Result = reader.GetString("MaxResult");
+                    result += temp_File_Name + "#" + temp_Data_Set_Serial + "#" + temp_Item_Count + "#" + temp_Cubage + "#" + temp_Max_Result+"@";
+                }
+                result = result.Substring(0, result.Length - 1);
+            }
+            return result;
+
+
+
+        }
+
 
         public bool is_Password(int id,string password)
         {
