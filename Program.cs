@@ -18,6 +18,9 @@ namespace Project2_Server_Gui
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+
+
+
         }
     }
 }
